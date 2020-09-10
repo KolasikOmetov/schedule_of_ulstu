@@ -1,4 +1,4 @@
-name: simbirsoft_lessons
+name: schedule_of_ulstu
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -40,6 +40,8 @@ dev_dependencies:
   retrofit_generator:
   json_serializable:
   flutter_bloc:
+  html:
+  http:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

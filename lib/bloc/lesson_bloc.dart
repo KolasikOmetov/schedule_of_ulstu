@@ -3,18 +3,17 @@ import 'dart:collection';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:simbirsoft_lessons/bloc/question_logic.dart';
-import 'package:simbirsoft_lessons/score_screen/score_screen.dart';
+import 'package:schedule_of_ulstu/bloc/lesson_logic.dart';
 
-class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
-  QuestionBloc() : super(LoadingState());
+class LessonBloc extends Bloc<LessonEvent, LessonState> {
+  LessonBloc() : super(LoadingState());
 
   @override
-  Stream<QuestionState> mapEventToState(QuestionEvent event) async* {
-    // LoadingQuestionEvent
-    if (event is LoadingQuestionEvent) {
+  Stream<LessonState> mapEventToState(LessonEvent event) async* {
+    // LoadingLessonEvent
+    if (event is LoadingLessonEvent) {
       try {
-        await event.repository.getAllQuestions();
+        await event.repository.getAllLessons();
       } catch (e) {
         yield ErrorState(e);
         return;
@@ -22,26 +21,26 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
       yield BaseState(0, -1, 0,
           allQ: UnmodifiableListView(event.repository.allQ));
     } else
-    // ReloadingQuestionEvent
-    if (event is ReloadingQuestionEvent) {
+    // ReloadingLessonEvent
+    if (event is ReloadingLessonEvent) {
       yield LoadingState();
     } else
-    // RefreshQuestionEvent
-    if (event is RefreshQuestionEvent) {
+    // RefreshLessonEvent
+    if (event is RefreshLessonEvent) {
       BaseState state = event.state;
       if (state.curQuest < state.allQ.length - 1) {
         yield BaseState(state.curQuest + 1, -1, state.curScore,
             allQ: state.allQ);
       } else {
-        Navigator.of(event.context).push(
-          MaterialPageRoute(
-              builder: (context) =>
-                  ScoreScreen(state.curScore, state.maxScore)),
-        );
+        // Navigator.of(event.context).push(
+        //   MaterialPageRoute(
+        //       builder: (context) =>
+        //           ScoreScreen(state.curScore, state.maxScore)),
+        // );
       }
     } else
-    // CheckQuestionEvent
-    if (event is CheckQuestionEvent) {
+    // CheckLessonEvent
+    if (event is CheckLessonEvent) {
       var state = event.state;
       if (state.chosen + 1 == state.allQ[state.curQuest].rightAnswerNum) {
         state.curScore = state.curScore + state.allQ[state.curQuest].difficalty * 5;
@@ -50,17 +49,17 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
         yield BaseState(state.curQuest + 1, -1, state.curScore,
             allQ: state.allQ);
       } else {
-        Navigator.of(event.context).push(
-          MaterialPageRoute(
-              builder: (context) =>
-                  ScoreScreen(state.curScore, state.maxScore)),
-        );
+        // Navigator.of(event.context).push(
+        //   MaterialPageRoute(
+        //       builder: (context) =>
+        //           ScoreScreen(state.curScore, state.maxScore)),
+        // );
       }
     } else
-    // ChooseQuestionEvent
-    if (event is ChooseQuestionEvent) {
+    // ChooseLessonEvent
+    if (event is ChooseLessonEvent) {
       var state = event.state;
-      print("ChooseQuestionEvent");
+      print("ChooseLessonEvent");
       yield BaseState(state.curQuest, event.chosen, state.curScore,
           allQ: state.allQ);
     } else {

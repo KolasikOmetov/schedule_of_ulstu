@@ -1,33 +1,33 @@
 import 'dart:math';
 
 import 'package:dio/dio.dart';
-import 'package:simbirsoft_lessons/data/model/question.dart';
-import 'package:simbirsoft_lessons/data/network/questions.dart';
-import 'package:simbirsoft_lessons/data/network/rest_client.dart';
-import 'package:simbirsoft_lessons/data/network/result.dart';
+import 'package:schedule_of_ulstu/data/model/lesson.dart';
+import 'package:schedule_of_ulstu/data/network/lessons.dart';
+import 'package:schedule_of_ulstu/data/network/rest_client.dart';
+import 'package:schedule_of_ulstu/data/network/result.dart';
 
-class QuestionsRepository {
+class LessonsRepository {
   Dio _dio;
   RestClient _restClient;
-  List<Question> allQ;
-  Future<Questions> _easyQ;
-  Future<Questions> _mediumQ;
-  Future<Questions> _hardQ;
+  List<Lesson> allQ;
+  Future<Lessons> _easyQ;
+  Future<Lessons> _mediumQ;
+  Future<Lessons> _hardQ;
 
-  QuestionsRepository() {
+  LessonsRepository() {
     _dio = Dio();
     _restClient = RestClient(_dio);
-    _getAllQ();
+    _getAllL();
   }
 
-  void _getAllQ() async {
-    _easyQ = _restClient.getEasyQuestions();
-    _mediumQ = _restClient.getMediumQuestions();
-    _hardQ = _restClient.getHardQuestions();
+  void _getAllL() {
+    _easyQ = _restClient.getEasyLessons();
+    _mediumQ = _restClient.getMediumLessons();
+    _hardQ = _restClient.getHardLessons();
   }
 
-  List<Question> _addToAllQ(Questions questions) {
-    List<Question> allQ = List<Question>();
+  List<Lesson> _addToAllQ(Lessons questions) {
+    List<Lesson> allQ = List<Lesson>();
     for (var item in questions.results) {
       int amountAnswers = item.incorrect_answers.length + 1;
       int rightAnswerNum = 1 + Random().nextInt(amountAnswers);
@@ -40,7 +40,7 @@ class QuestionsRepository {
           answers.add(item.incorrect_answers[i - bias]);
         }
       }
-      allQ.add(Question(
+      allQ.add(Lesson(
           text: item.question,
           answers: answers,
           difficalty: _getDifficalty(item.difficulty),
@@ -62,7 +62,7 @@ class QuestionsRepository {
     return 0;
   }
 
-  Future<List<Question>> getAllQuestions() async {
+  Future<List<Lesson>> getAllLessons() async {
     return await Future.wait([_easyQ, _mediumQ, _hardQ]).then((res) {
       allQ = _addToAllQ(res[0])
         ..addAll(_addToAllQ(res[1]))
