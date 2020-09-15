@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:schedule_of_ulstu/bloc/lesson_bloc.dart';
-import 'package:schedule_of_ulstu/bloc/lesson_logic.dart';
-import 'package:schedule_of_ulstu/data/repository/lessons_repository.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'next_button.dart';
-import 'progress_bar.dart';
-import 'lesson_box.dart';
 
 class LessonScreen extends StatefulWidget {
   @override
@@ -14,76 +7,75 @@ class LessonScreen extends StatefulWidget {
 }
 
 class _LessonScreenState extends State<LessonScreen> {
-  double progressAnimation = 0;
-  var bloc = LessonBloc();
+  final pageController = PageController(initialPage: 1);
 
   void initState() {
     super.initState();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
-  void setProgressTimer(double val) {
-    progressAnimation = val;
-  }
-
-  void dispose() {
-    super.dispose();
-    bloc.close();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: BlocProvider(
-          create: (BuildContext context) => bloc,
-          child: BlocBuilder<LessonBloc, LessonState>(
-            cubit: bloc,
-            builder: (context, state) {
-              if (state is LoadingState) {
-                bloc.add(LoadingLessonEvent(LessonsRepository()));
-                return Center(
-                    child: CircularProgressIndicator(
-                        backgroundColor: Colors.yellow));
-              } else if (state is ErrorState) {
-                return Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Network error!"),
-                    Text(state.exception.toString()),
-                    GestureDetector(
-                      child: Text(
-                        "Try again",
-                        style: TextStyle(
-                            backgroundColor: Theme.of(context).accentColor),
-                      ),
-                      onTap: () => bloc.add(ReloadingLessonEvent()),
-                    )
-                  ],
-                ));
-              } else if (state is BaseState) {
-                return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: Column(
-                      children: <Widget>[
-                        Expanded(
-                            child: ProgressBar(state.curScore, state.maxScore)),
-                        Expanded(
-                          child: LessonBox(progressAnimation, setProgressTimer),
-                          flex: 6,
-                        ),
-                        Expanded(
-                          child: NextButton(state, setProgressTimer),
-                          flex: 1,
-                        )
-                      ],
-                    ));
-              } else {
-                throw UnimplementedError();
-              }
-            },
-          )),
-    ));
+      body: PageView.builder(
+        itemBuilder: (context, position) {
+          return CustomScrollView(slivers: <Widget>[
+            SliverAppBar(
+              floating: true,
+              toolbarHeight: 150,
+              title: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+                      Text("ПИбд-21"),
+                      IconButton(icon: Icon(Icons.refresh), onPressed: () {}),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                          icon: Icon(Icons.navigate_before), onPressed: () {}),
+                      Text("1-я неделя"),
+                      IconButton(
+                          icon: Icon(Icons.navigate_next), onPressed: () {}),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                          icon: Icon(Icons.navigate_before), onPressed: () {}),
+                      Text("Понедельник"),
+                      IconButton(
+                          icon: Icon(Icons.navigate_next), onPressed: () {}),
+                    ],
+                  ),
+                ],
+              ),
+              expandedHeight: 200,
+              backgroundColor: Color(0xE94F08),
+            ),
+            SliverFixedExtentList(
+              itemExtent: 150.0,
+              delegate: SliverChildListDelegate(
+                [
+                  Container(color: Colors.red),
+                  Container(color: Colors.purple),
+                  Container(color: Colors.green),
+                  Container(color: Colors.orange),
+                  Container(color: Colors.yellow),
+                  Container(color: Colors.pink),
+                ],
+              ),
+            )
+          ]);
+        },
+        itemCount: 7,
+      ),
+    );
   }
 }

@@ -8,17 +8,17 @@ class App extends StatelessWidget {
       title: 'Qiuz',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        scaffoldBackgroundColor: Colors.deepPurple[800],
+        primarySwatch: Colors.deepOrange,
+        scaffoldBackgroundColor: Color(0x7f152e),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: TextTheme(
           caption: TextStyle(fontSize: 10, color: Colors.white),
           headline1:
               TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
           headline3: TextStyle(color: Colors.white),
-          headline5: TextStyle(color: Colors.yellow, fontSize: 25),
+          headline5: TextStyle(color: Colors.white, fontSize: 25),
           headline6: TextStyle(color: Colors.white, fontSize: 20),
-          bodyText1: TextStyle(fontSize: 17, color: Colors.deepPurple[300]),
+          bodyText1: TextStyle(fontSize: 17, color: Colors.deepOrangeAccent),
           bodyText2: TextStyle(fontSize: 17, color: Colors.white),
           button: TextStyle(fontSize: 17, color: Colors.white),
         ),
@@ -27,3 +27,5 @@ class App extends StatelessWidget {
     );
   }
 }
+
+// colors: #7f152e #d61800 #edae01 #e94f08
