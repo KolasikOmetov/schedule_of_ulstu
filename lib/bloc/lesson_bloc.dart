@@ -1,0 +1,29 @@
+import 'dart:collection';
+
+import 'package:bloc/bloc.dart';
+import 'package:schedule_of_ulstu/bloc/lesson_logic.dart';
+
+class LessonBloc extends Bloc<LessonEvent, LessonState> {
+  LessonBloc() : super(LoadingState());
+
+  @override
+  Stream<LessonState> mapEventToState(LessonEvent event) async* {
+    // LoadingLessonEvent
+    if (event is LoadingLessonEvent) {
+      try {
+        await event.lessonsRepository.getAllLessons();
+      } catch (e) {
+        print(e);
+        yield ErrorState(e);
+        return;
+      }
+      yield BaseState(allL: UnmodifiableListView(event.lessonsRepository.allL));
+    } else
+    // ReloadingLessonEvent
+    if (event is ReloadingLessonEvent) {
+      yield LoadingState();
+    } else {
+      throw UnimplementedError();
+    }
+  }
+}
