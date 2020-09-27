@@ -17,11 +17,15 @@ class LessonBloc extends Bloc<LessonEvent, LessonState> {
         yield ErrorState(e);
         return;
       }
-      yield BaseState(allL: UnmodifiableListView(event.lessonsRepository.allL));
+      yield BaseState(
+          allL: UnmodifiableListView(event.lessonsRepository.allL), week: 1);
     } else
     // ReloadingLessonEvent
     if (event is ReloadingLessonEvent) {
       yield LoadingState();
+    } else if (event is ChangeWeekEvent) {
+      int week = event.state.week == 1 ? 2 : 1;
+      yield BaseState(allL: event.state.allL, week: week);
     } else {
       throw UnimplementedError();
     }

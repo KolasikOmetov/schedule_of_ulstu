@@ -16,8 +16,9 @@ class ErrorState extends LessonState {
 
 class BaseState extends LessonState {
   final UnmodifiableListView<Lesson> allL;
+  final int week;
 
-  BaseState({@required this.allL});
+  BaseState({@required this.allL, this.week});
 }
 
 class LessonEvent {}
@@ -26,6 +27,12 @@ class LoadingLessonEvent extends LessonEvent {
   LessonsRepository lessonsRepository;
 
   LoadingLessonEvent(this.lessonsRepository);
+}
+
+class ChangeWeekEvent extends LessonEvent {
+  BaseState state;
+
+  ChangeWeekEvent(this.state);
 }
 
 class ReloadingLessonEvent extends LessonEvent {}

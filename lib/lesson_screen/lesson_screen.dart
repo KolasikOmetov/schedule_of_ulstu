@@ -29,6 +29,7 @@ class _LessonScreenState extends State<LessonScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
         body: SafeArea(
       child: BlocProvider(
           create: (BuildContext context) => bloc,

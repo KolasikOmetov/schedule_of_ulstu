@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:schedule_of_ulstu/bloc/lesson_bloc.dart';
 import 'package:schedule_of_ulstu/bloc/lesson_logic.dart';
+import 'package:schedule_of_ulstu/lesson_screen/card_lesson.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainStage extends StatefulWidget {
   final BaseState state;
@@ -10,11 +13,21 @@ class MainStage extends StatefulWidget {
 }
 
 class _MainStageState extends State<MainStage> {
-  final pageController = PageController(initialPage: 1);
-
+  final pageController =
+      PageController(initialPage: DateTime.now().weekday - 1);
+  final daysOfWeek = [
+    "Понедельник",
+    "Вторник",
+    "Среда",
+    "Четверг",
+    "Пятница",
+    "Суббота",
+    "Воскресенье",
+  ];
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
+      itemCount: 7,
       controller: pageController,
       itemBuilder: (context, position) {
         return CustomScrollView(slivers: <Widget>[
@@ -29,27 +42,52 @@ class _MainStageState extends State<MainStage> {
                   children: [
                     IconButton(icon: Icon(Icons.menu), onPressed: () {}),
                     Text("ПИбд-21"),
-                    IconButton(icon: Icon(Icons.refresh), onPressed: () {}),
+                    IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: () {
+                          BlocProvider.of<LessonBloc>(context)
+                              .add(ReloadingLessonEvent());
+                        }),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                        icon: Icon(Icons.navigate_before), onPressed: () {}),
-                    Text("1-я неделя"),
+                        icon: Icon(Icons.navigate_before),
+                        onPressed: () {
+                          BlocProvider.of<LessonBloc>(context)
+                              .add(ChangeWeekEvent(widget.state));
+                        }),
+                    widget.state.week == 1
+                        ? Text("1-я неделя")
+                        : Text("2-я неделя"),
                     IconButton(
-                        icon: Icon(Icons.navigate_next), onPressed: () {}),
+                        icon: Icon(Icons.navigate_next),
+                        onPressed: () {
+                          BlocProvider.of<LessonBloc>(context)
+                              .add(ChangeWeekEvent(widget.state));
+                        }),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                        icon: Icon(Icons.navigate_before), onPressed: () {}),
-                    Text("Понедельник" + (position+1).toString()),
+                        icon: Icon(Icons.navigate_before),
+                        onPressed: () {
+                          pageController.previousPage(
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.easeIn);
+                        }),
+                    Text(daysOfWeek[position]),
                     IconButton(
-                        icon: Icon(Icons.navigate_next), onPressed: () {}),
+                        icon: Icon(Icons.navigate_next),
+                        onPressed: () {
+                          pageController.nextPage(
+                              duration: Duration(seconds: 1),
+                              curve: Curves.easeIn);
+                        }),
                   ],
                 ),
               ],
@@ -58,22 +96,40 @@ class _MainStageState extends State<MainStage> {
             backgroundColor: Color(0xE94F08),
           ),
           SliverFixedExtentList(
-              itemExtent: 150.0,
+              itemExtent: 170,
               delegate: SliverChildBuilderDelegate(
                 (context, itemNum) {
-                return GestureDetector(
-                                  child: Container(
-                    color: Colors.red,
-                    child: Center(child: Text(widget.state.allL[((position+1)*8 + itemNum).toInt()].text)),
-                  ),
-                  onTap: (){print(((position)*8 + itemNum).toInt());},
-                );
-              },
-              childCount: 8, 
+                  String item = widget
+                      .state
+                      .allL[((position + 1) * 8 +
+                              itemNum +
+                              56 * (widget.state.week - 1))
+                          .toInt()]
+                      .text;
+                  String time = widget.state.allL[itemNum].text;
+                  // if(item != "\n"){
+                  return GestureDetector(
+                    child: CardLesson(
+                      position: itemNum + 1,
+                      item: item,
+                      time: time,
+                    ),
+                    onTap: () {
+                      print(((position + 1) * 8 +
+                              itemNum +
+                              56 * (widget.state.week - 1))
+                          .toInt());
+                    },
+                  );
+                  // }
+                  // else {
+                  //   return Container(child: Text("data"),);
+                  // }
+                },
+                childCount: 8,
               ))
         ]);
       },
-      itemCount: 7,
     );
   }
 }

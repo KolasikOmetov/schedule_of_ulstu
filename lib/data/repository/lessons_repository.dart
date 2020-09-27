@@ -31,7 +31,7 @@ class LessonsRepository {
   List<Lesson> parseToListLessons(Document r) {
     List<Lesson> allL = [];
     List<Element> cells = r.getElementsByTagName("td");
-    for (int line = 2; line < 18; line++) {
+    for (int line = 1; line < 18; line++) {
       if (line == 9 || line == 10) continue;
 
       for (int cell = line * 10 + 1; cell < line * 10 + 9; cell++) {
