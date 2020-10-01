@@ -20,7 +20,7 @@ class CardLesson extends StatelessWidget {
                 padding: EdgeInsets.all(15),
                 child: Column(
                   children: [
-                    Expanded(
+                    Flexible(
                         child: Row(children: [
                       Expanded(
                           child: Container(
@@ -33,18 +33,14 @@ class CardLesson extends StatelessWidget {
                           flex: 9,
                           child: Container(child: Center(child: Text(time.trim()))))
                     ])),
-                    Expanded(
-                      flex: 6,
-                      child: Container(
-                          child: isEmpty
-                              ? Center(
-                                  child: Text("Нет занятия"),
-                                )
+                    Flexible(
+                      flex: 4,
+                      child: isEmpty
+                              ? Text("Нет занятия")
                               : Text(
                                   item,
-                                  style: Theme.of(context).textTheme.headline6,
+                                  // style: Theme.of(context).textTheme.headline6,
                                 )),
-                    )
                   ],
                 ))),
       ),

@@ -77,7 +77,7 @@ class _MainStageState extends State<MainStage> {
                         icon: Icon(Icons.navigate_before),
                         onPressed: () {
                           pageController.previousPage(
-                              duration: Duration(milliseconds: 500),
+                              duration: Duration(milliseconds: 300),
                               curve: Curves.easeIn);
                         }),
                     Text(daysOfWeek[position]),
@@ -85,7 +85,7 @@ class _MainStageState extends State<MainStage> {
                         icon: Icon(Icons.navigate_next),
                         onPressed: () {
                           pageController.nextPage(
-                              duration: Duration(seconds: 1),
+                              duration: Duration(milliseconds: 300),
                               curve: Curves.easeIn);
                         }),
                   ],
