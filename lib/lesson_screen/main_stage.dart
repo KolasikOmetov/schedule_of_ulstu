@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:schedule_of_ulstu/bloc/lesson_bloc.dart';
 import 'package:schedule_of_ulstu/bloc/lesson_logic.dart';
+import 'package:schedule_of_ulstu/data/model/lesson.dart';
 import 'package:schedule_of_ulstu/lesson_screen/card_lesson.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -111,20 +112,17 @@ class _MainStageState extends State<MainStage> {
               itemExtent: 170,
               delegate: SliverChildBuilderDelegate(
                 (context, itemNum) {
-                  String item = widget
+                  Lesson lesson = widget
                       .state
-                      .allL[((position + 1) * 8 +
+                      .allL[(position * 8 +
                               itemNum +
                               56 * (widget.state.week - 1))
-                          .toInt()]
-                      .text;
-                  String time = widget.state.allL[itemNum].text;
+                          .toInt()];
                   // if(item != "\n"){
                   return GestureDetector(
                     child: CardLesson(
                       position: itemNum + 1,
-                      item: item,
-                      time: time,
+                      lesson: lesson,
                     ),
                     onTap: () {
                       print(((position + 1) * 8 +

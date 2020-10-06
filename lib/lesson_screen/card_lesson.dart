@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:schedule_of_ulstu/data/model/lesson.dart';
 
 class CardLesson extends StatelessWidget {
-  final String item;
-  final String time;
+  final Lesson lesson;
   final int position;
 
-  CardLesson({Key key, this.item, this.position, this.time}) : super(key: key);
+  CardLesson({Key key, this.lesson, this.position}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool isEmpty = item == "\n" ? true : false;
+    bool isEmpty = lesson.text == "\n" ? true : false;
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: ClipRRect(
@@ -31,14 +31,14 @@ class CardLesson extends StatelessWidget {
                       ))))),
                       Expanded(
                           flex: 9,
-                          child: Container(child: Center(child: Text(time.trim()))))
+                          child: Container(child: Center(child: Text("${lesson.timeStart}-${lesson.timeFinish}"))))
                     ])),
                     Flexible(
                       flex: 4,
                       child: isEmpty
                               ? Text("Нет занятия")
                               : Text(
-                                  item,
+                                  lesson.text,
                                   // style: Theme.of(context).textTheme.headline6,
                                 )),
                   ],
