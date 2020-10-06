@@ -23,24 +23,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  retrofit: 
-  json_annotation:
+  html:
+  http:
+  flutter_bloc:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
-
-dependency_overrides:
-  analyzer: '0.39.14'
   
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner:
-  json_serializable:
-  flutter_bloc:
-  html:
-  http:
+  flutter_launcher_icons:
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/Logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

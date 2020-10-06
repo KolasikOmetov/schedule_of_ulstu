@@ -27,7 +27,7 @@ class _MainStageState extends State<MainStage> {
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
-      itemCount: 7,
+      itemCount: daysOfWeek.length,
       controller: pageController,
       itemBuilder: (context, position) {
         return CustomScrollView(slivers: <Widget>[
@@ -76,17 +76,29 @@ class _MainStageState extends State<MainStage> {
                     IconButton(
                         icon: Icon(Icons.navigate_before),
                         onPressed: () {
-                          pageController.previousPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn);
+                          if (position == 0) {
+                            pageController.jumpToPage(daysOfWeek.length - 1);
+                            BlocProvider.of<LessonBloc>(context)
+                                .add(ChangeWeekEvent(widget.state));
+                          } else {
+                            pageController.previousPage(
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeIn);
+                          }
                         }),
                     Text(daysOfWeek[position]),
                     IconButton(
                         icon: Icon(Icons.navigate_next),
                         onPressed: () {
-                          pageController.nextPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn);
+                          if (position == daysOfWeek.length - 1) {
+                            pageController.jumpToPage(0);
+                            BlocProvider.of<LessonBloc>(context)
+                                .add(ChangeWeekEvent(widget.state));
+                          } else {
+                            pageController.nextPage(
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeIn);
+                          }
                         }),
                   ],
                 ),
