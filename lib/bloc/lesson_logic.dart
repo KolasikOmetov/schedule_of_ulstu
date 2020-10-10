@@ -9,7 +9,7 @@ class LessonState {}
 class LoadingState extends LessonState {}
 
 class ErrorState extends LessonState {
-  Exception exception;
+  String exception;
 
   ErrorState(this.exception);
 }

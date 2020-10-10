@@ -14,7 +14,7 @@ class LessonBloc extends Bloc<LessonEvent, LessonState> {
         await event.lessonsRepository.getAllLessons();
       } catch (e) {
         print(e);
-        yield ErrorState(e);
+        yield ErrorState(e.toString());
         return;
       }
       yield BaseState(

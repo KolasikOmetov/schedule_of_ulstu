@@ -6,37 +6,46 @@ import 'package:html/dom.dart';
 import 'cp1251.dart';
 
 class LessonsRepository {
-  HTMLLoader _htmlLoader;
-  List<Lesson> allL;
+  HTMLLoader _htmlLoaderGroup;
+  HTMLLoader _htmlLoaderPageOfGroups;
+  List<Lesson> allL = [];
+  List<Element> allG;
   Future<void> _document;
+  String lessonsLink;
+  String baseURL = "https://www.ulstu.ru/schedule/students/part1/";
   final cp1251 = CP1251.cp1251;
+  final String groupName;
 
-  LessonsRepository() {
-    _htmlLoader = HTMLLoader();
-    _getAllL();
-  }
-
-  void _getAllL() async {
-    _document = _htmlLoader
-        .getDocument("https://www.ulstu.ru/schedule/students/part1/39.html");
+  LessonsRepository(this.groupName) {
+    _htmlLoaderGroup = HTMLLoader();
+    _htmlLoaderPageOfGroups = HTMLLoader();
   }
 
   Future<List<Lesson>> getAllLessons() async {
-    return await Future.wait([_document]).then((res) {
-      allL = parseToListLessons(_htmlLoader.document);
+// "https://www.ulstu.ru/schedule/students/part1/39.html"
+    await _htmlLoaderPageOfGroups
+        .getDocument(
+            "https://www.ulstu.ru/schedule/students/part1/raspisan.html")
+        .whenComplete(() {
+      allG = _htmlLoaderPageOfGroups.document.getElementsByTagName("a");
+      findLinkOfGroup(groupName);
+    });
+    print("$lessonsLink");
+    _document = _htmlLoaderGroup.getDocument(lessonsLink);
+    return Future.wait([_document]).then((res) {
+      parseToListLessons(_htmlLoaderGroup.document);
       return allL;
     });
   }
 
-  List<Lesson> parseToListLessons(Document r) {
-    List<Lesson> allL = [];
+  void parseToListLessons(Document r) {
     List<Element> cells = r.getElementsByTagName("td");
     for (int line = 2; line < 18; line++) {
       if (line == 9 || line == 10) continue;
 
       for (int cell = line * 10 + 1; cell < line * 10 + 9; cell++) {
         int column = cell % 10;
-        List<String> time = cells[column+10].text.trim().split("-");
+        List<String> time = cells[column + 10].text.trim().split("-");
         allL.add(Lesson(
             text: _decodeCp1251(cells[cell].text),
             timeStart: time[0],
@@ -44,7 +53,6 @@ class LessonsRepository {
       }
     }
     print(allL.length);
-    return allL;
   }
 
   String _decodeCp1251(String body) {
@@ -54,5 +62,15 @@ class LessonsRepository {
       htmlBuffer.write('${cp1251[bytes[i]]}');
     }
     return htmlBuffer.toString();
+  }
+
+  void findLinkOfGroup(String s) {
+    for (Element group in allG) {
+      if (_decodeCp1251(group.text).contains(s)) {
+        lessonsLink = baseURL + group.attributes["href"];
+        return;
+      }
+    }
+    throw ArgumentError("Выбранной вами группы нет");
   }
 }

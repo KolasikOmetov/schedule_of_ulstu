@@ -38,7 +38,7 @@ class _LessonScreenState extends State<LessonScreen> {
             builder: (context, state) {
               if (state is LoadingState) {
                 bloc.add(
-                    LoadingLessonEvent(LessonsRepository()));
+                    LoadingLessonEvent(LessonsRepository("ПИбд-21")));
                 return Center(
                     child: CircularProgressIndicator(
                         backgroundColor: Colors.yellow));
@@ -48,7 +48,7 @@ class _LessonScreenState extends State<LessonScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Network error!"),
-                    Text(state.exception.toString()),
+                    Text(state.exception),
                     GestureDetector(
                       child: Text(
                         "Try again",
