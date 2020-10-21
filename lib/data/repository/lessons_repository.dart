@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:schedule_of_ulstu/data/model/lesson.dart';
 import 'package:schedule_of_ulstu/data/network/html_loader.dart';
 import 'package:html/dom.dart';
+import 'package:schedule_of_ulstu/services/db.dart';
 import 'cp1251.dart';
 
 class LessonsRepository {
@@ -22,7 +23,6 @@ class LessonsRepository {
   }
 
   Future<List<Lesson>> getAllLessons() async {
-// "https://www.ulstu.ru/schedule/students/part1/39.html"
     await _htmlLoaderPageOfGroups
         .getDocument(
             "https://www.ulstu.ru/schedule/students/part1/raspisan.html")
@@ -34,8 +34,33 @@ class LessonsRepository {
     _document = _htmlLoaderGroup.getDocument(lessonsLink);
     return Future.wait([_document]).then((res) {
       parseToListLessons(_htmlLoaderGroup.document);
+      setId();
+      putInDB();
       return allL;
     });
+  }
+
+  void putInDB() async {
+    List<Lesson> allLDB = List();
+    List<Map<String, dynamic>> query = List();
+    try {
+      query = await DB.query("lessons");
+    } catch (e) {
+      print(e);
+    }
+    
+    for (var lesson in query) {
+      allLDB.add(Lesson.fromMap(lesson));
+    }
+    if (allLDB.length == 0) {
+      for (var lesson in allL) {
+        await DB.insert("lessons", lesson);
+      }
+    } else {
+      for (var lesson in allL) {
+        await DB.update("lessons", lesson);
+      }
+    }
   }
 
   void parseToListLessons(Document r) {
@@ -72,5 +97,11 @@ class LessonsRepository {
       }
     }
     throw ArgumentError("Выбранной вами группы нет");
+  }
+
+  void setId() {
+    for (int i = 0; i<allL.length; i++) {
+      allL[i].id = i;
+    }
   }
 }
