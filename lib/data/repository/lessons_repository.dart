@@ -48,7 +48,7 @@ class LessonsRepository {
     } catch (e) {
       print(e);
     }
-    
+
     for (var lesson in query) {
       allLDB.add(Lesson.fromMap(lesson));
     }
@@ -100,7 +100,7 @@ class LessonsRepository {
   }
 
   void setId() {
-    for (int i = 0; i<allL.length; i++) {
+    for (int i = 0; i < allL.length; i++) {
       allL[i].id = i;
     }
   }

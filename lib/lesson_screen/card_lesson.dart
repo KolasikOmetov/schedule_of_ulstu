@@ -9,7 +9,7 @@ class CardLesson extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isEmpty = lesson.text == "\n" ? true : false;
+    bool isEmpty = lesson.text == "\n";
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: ClipRRect(
@@ -19,9 +19,7 @@ class CardLesson extends StatelessWidget {
             child: Padding(
                 padding: EdgeInsets.all(15),
                 child: Column(
-                  children: [
-                    Flexible(
-                        child: Row(children: [
+                  children: [Row(children: [
                       Expanded(
                           child: Container(
                               child: CircleAvatar(
@@ -32,17 +30,16 @@ class CardLesson extends StatelessWidget {
                       Expanded(
                           flex: 9,
                           child: Container(child: Center(child: Text("${lesson.timeStart}-${lesson.timeFinish}"))))
-                    ])),
-                    Flexible(
-                      flex: 4,
-                      child: isEmpty
+                    ]),
+                    isEmpty
                               ? Text("Нет занятия")
                               : Text(
                                   lesson.text,
                                   // style: Theme.of(context).textTheme.headline6,
-                                )),
+                                ),
                   ],
-                ))),
+                ))
+                ),
       ),
     );
   }
