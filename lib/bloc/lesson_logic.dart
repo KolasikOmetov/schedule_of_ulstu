@@ -29,6 +29,11 @@ class LoadingLessonEvent extends LessonEvent {
   LoadingLessonEvent(this.lessonsRepository);
 }
 
+class LoadingLessonsFromDBEvent extends LessonEvent {
+  BaseState state;
+  LoadingLessonsFromDBEvent();
+}
+
 class ChangeWeekEvent extends LessonEvent {
   BaseState state;
 

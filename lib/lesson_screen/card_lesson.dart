@@ -19,7 +19,8 @@ class CardLesson extends StatelessWidget {
             child: Padding(
                 padding: EdgeInsets.all(15),
                 child: Column(
-                  children: [Row(children: [
+                  children: [
+                    Row(children: [
                       Expanded(
                           child: Container(
                               child: CircleAvatar(
@@ -28,18 +29,23 @@ class CardLesson extends StatelessWidget {
                         position.toString(),
                       ))))),
                       Expanded(
-                          flex: 9,
-                          child: Container(child: Center(child: Text("${lesson.timeStart}-${lesson.timeFinish}"))))
+                          flex: 12,
+                          child: Container(
+                              child: Center(
+                                  child: Text(
+                            "${lesson.timeStart}-${lesson.timeFinish}",
+                            style: Theme.of(context).textTheme.headline6,
+                          ))))
                     ]),
                     isEmpty
-                              ? Text("Нет занятия")
-                              : Text(
-                                  lesson.text,
-                                  // style: Theme.of(context).textTheme.headline6,
-                                ),
+                        ? Text("Нет занятия")
+                        : Text(
+                            lesson.text,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                   ],
-                ))
-                ),
+                ))),
       ),
     );
   }
