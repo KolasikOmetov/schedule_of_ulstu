@@ -9,7 +9,7 @@ class LessonState {}
 class LoadingState extends LessonState {}
 
 class ErrorState extends LessonState {
-  Exception exception;
+  String exception;
 
   ErrorState(this.exception);
 }
@@ -27,6 +27,11 @@ class LoadingLessonEvent extends LessonEvent {
   LessonsRepository lessonsRepository;
 
   LoadingLessonEvent(this.lessonsRepository);
+}
+
+class LoadingLessonsFromDBEvent extends LessonEvent {
+  BaseState state;
+  LoadingLessonsFromDBEvent();
 }
 
 class ChangeWeekEvent extends LessonEvent {

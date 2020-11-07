@@ -16,10 +16,7 @@ class App extends StatelessWidget {
           headline1:
               TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
           headline3: TextStyle(color: Colors.white),
-          headline5: TextStyle(color: Colors.white, fontSize: 25),
-          // bodyText1: TextStyle(fontSize: 17, color: Colors.deepOrangeAccent),
-          // bodyText2: TextStyle(fontSize: 17, color: Colors.white),
-          // button: TextStyle(fontSize: 17, color: Colors.white),
+          headline5: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
         ),
       ),
       home: SafeArea(child: LessonScreen()),
